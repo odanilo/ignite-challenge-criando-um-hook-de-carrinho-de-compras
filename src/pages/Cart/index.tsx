@@ -17,20 +17,18 @@ interface Product {
   amount: number;
 }
 
-interface ProductFormatted extends Product {
+interface cartFormatted extends Product {
   priceFormatted: string;
+  subtotal: string;
 }
 
 const Cart = (): JSX.Element => {
   const { cart, removeProduct, updateProductAmount } = useCart();
 
-  const cartFormatted: ProductFormatted[] = cart.map((product) => ({
-    amount: product.amount,
-    id: product.id,
-    image: product.image,
-    price: product.price,
+  const cartFormatted: cartFormatted[] = cart.map((product) => ({
+    ...product,
     priceFormatted: formatPrice(product.price),
-    title: product.title,
+    subtotal: formatPrice(product.price * product.amount),
   }));
   const total = formatPrice(
     cart.reduce((sumTotal, product) => {
@@ -104,7 +102,7 @@ const Cart = (): JSX.Element => {
                 </div>
               </td>
               <td>
-                <strong>{formatPrice(product.price)}</strong>
+                <strong>{product.subtotal}</strong>
               </td>
               <td>
                 <button
